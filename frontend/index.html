@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="style.css">
+
+    <style>
+    #seatGrid {
+        display: grid;
+        grid-template-columns: repeat(5, 60px);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .seat-btn {
+        padding: 10px;
+        border: 1px solid #333;
+        cursor: pointer;
+        background: #f0f0f0;
+    }
+
+    .seat-btn:hover {
+        background: #ddd;
+    }
+
+    .seat-btn.selected {
+        background: #4caf50;
+        color: white;
+    }
+
+    .seat-btn.booked {
+        background: #999;
+        color: white;
+        cursor: not-allowed;
+    }
+    </style>
+
+    <title>Project: Movie Booking App</title>
+</head>
+<body>
+    <h1>Movie Booking System</h1>
+    <br>
+
+    <h2>Avaliable Movies</h2>
+    <select id="movieSelect"></select>
+
+    <h2>Showtime</h2>
+    <select id="showtime"></select>
+
+    <h2>Select Seat</h2>
+    <div id="seatGrid"></div>
+
+    <h2>User Info</h2>
+    <input type="text" id="name" placeholder="Name"><br><br>
+    <input type="text" id="email" placeholder="Email"><br><br>
+    <input type="text" id="phone" placeholder="Phone"><br><br>
+
+    <button id="bookBtn" onclick="bookTicket()" disabled>Book Ticket</button>
+
+    <p id="result"></p>
+
+    <br><br>
+
+    <a href="history.html">Go to Booking History →</a>
+
+    <script src="script.js"></script>
+</body>
+</html>
