@@ -5,6 +5,7 @@ from database import movies_collection, bookings_collection, users_collection
 from pydantic import BaseModel
 from bson import ObjectId
 from fastapi.middleware.cors import CORSMiddleware
+from bson.errors import InvalidId
 
 app = FastAPI()
 
@@ -87,7 +88,9 @@ def booking_history(email : str):
     
     user_id = str(user["_id"])
 
-    bookings = list(bookings_collection.find({"user_id": user_id}))
+    bookings = list(
+        bookings_collection.find({"user_id": str(user["_id"])})
+        )
 
     result = []
 
@@ -97,6 +100,7 @@ def booking_history(email : str):
         )
 
         result.append({
+            "_id": str(booking["_id"]),
             "movie_title": movie["title"] if movie else "Unknown",
             "movie_id": booking["movie_id"],
             "showtime": booking["showtime"],
@@ -104,3 +108,18 @@ def booking_history(email : str):
         })
 
     return {"bookings": result}
+
+# delete booking
+@app.delete("/booking/{booking_id}")
+def delete_booking(booking_id: str):
+    try:
+        oid = ObjectId(booking_id)
+    except InvalidId:
+        raise HTTPException(status_code=400, detail="Invalid booking ID")
+
+    result = bookings_collection.delete_one({"_id": oid})
+
+    if result.deleted_count == 0:
+        raise HTTPException(status_code=404, detail="Booking not found")
+
+    return {"message": "Booking deleted successfully"}
